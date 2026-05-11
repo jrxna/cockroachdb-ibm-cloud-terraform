@@ -203,22 +203,7 @@
               "key": "download_commands",
               "description": "Sample download commands for each platform"
             }
-          ],
-          "iam_permissions": [
-            {
-              "role_crns": [],
-              "service_name": "None required - download only"
-            }
-          ],
-          "compliance": {
-            "authority": "scc-v3",
-            "profiles": [
-              {
-                "profile_name": "Not applicable - downloadable software only",
-                "profile_version": "N/A"
-              }
-            ]
-          }
+          ]
         }
       ]
     }

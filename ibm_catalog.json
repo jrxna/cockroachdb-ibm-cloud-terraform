@@ -2,7 +2,7 @@
   "products": [
     {
       "label": "CockroachDB",
-      "name": "cockroachdb-downloadable",
+      "name": "cockroachdb",
       "product_kind": "solution",
       "tags": [
         "database",

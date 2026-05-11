@@ -5,7 +5,7 @@
 module "cockroachdb" {
   source = "../../"
 
-  cockroachdb_version = "v24.3.3"
+  cockroachdb_version = "v26.1.4"
   target_platforms = [
     "linux-amd64",
     "linux-arm64",

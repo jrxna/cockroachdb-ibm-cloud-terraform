@@ -81,7 +81,7 @@
             "diagrams": [
               {
                 "diagram": {
-                  "url": "https://www.cockroachlabs.com/docs/stable/images/v24.3/cockroachdb-architecture.png",
+                  "url": "https://www.cockroachlabs.com/docs/stable/images/v26.1/cockroachdb-architecture.png",
                   "caption": "CockroachDB distributed architecture with SQL layer, transaction layer, distribution layer, replication layer, and storage layer",
                   "type": "image/png"
                 },
@@ -93,25 +93,25 @@
             {
               "key": "cockroachdb_version",
               "type": "string",
-              "default_value": "v24.3.3",
-              "description": "The version of CockroachDB to download. Must be in format vX.Y.Z (e.g., v24.3.3)",
+              "default_value": "v26.1.4",
+              "description": "The version of CockroachDB to download. Must be in format vX.Y.Z (e.g., v26.1.4)",
               "required": true,
               "options": [
                 {
-                  "label": "v24.3.3 (Latest Stable - Recommended)",
-                  "value": "v24.3.3"
+                  "label": "v26.1.4 (Latest Stable - Recommended)",
+                  "value": "v26.1.4"
                 },
                 {
-                  "label": "v24.2.8 (Previous Stable)",
-                  "value": "v24.2.8"
+                  "label": "v25.4.10 (Latest LTS - Long Term Support)",
+                  "value": "v25.4.10"
                 },
                 {
-                  "label": "v24.1.11 (LTS - Long Term Support)",
-                  "value": "v24.1.11"
+                  "label": "v25.2.18 (Previous LTS)",
+                  "value": "v25.2.18"
                 },
                 {
-                  "label": "v23.2.17 (Previous LTS)",
-                  "value": "v23.2.17"
+                  "label": "v24.3.32 (Older LTS)",
+                  "value": "v24.3.32"
                 }
               ],
               "custom_config": {

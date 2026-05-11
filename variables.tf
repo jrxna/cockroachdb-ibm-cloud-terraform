@@ -5,11 +5,11 @@
 variable "cockroachdb_version" {
   description = "The version of CockroachDB to download. Corresponds to GitHub release tags."
   type        = string
-  default     = "v24.3.3"
+  default     = "v26.1.4"
 
   validation {
     condition     = can(regex("^v[0-9]+\\.[0-9]+\\.[0-9]+$", var.cockroachdb_version))
-    error_message = "Version must be in the format vX.Y.Z (e.g., v24.3.3)"
+    error_message = "Version must be in the format vX.Y.Z (e.g., v26.1.4)"
   }
 }
 

@@ -27,7 +27,7 @@ CockroachDB is a distributed SQL database built on a transactional and strongly-
 module "cockroachdb" {
   source = "./"
   
-  cockroachdb_version = "v24.3.3"
+  cockroachdb_version = "v26.1.4"
   target_platforms    = ["linux-amd64"]
 }
 
@@ -42,7 +42,7 @@ output "download_url" {
 module "cockroachdb" {
   source = "./"
   
-  cockroachdb_version = "v24.3.3"
+  cockroachdb_version = "v26.1.4"
   target_platforms    = [
     "linux-amd64",
     "linux-arm64",
@@ -69,7 +69,7 @@ output "checksums" {
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|----------|
-| cockroachdb_version | CockroachDB version to download (format: vX.Y.Z) | string | "v24.3.3" | No |
+| cockroachdb_version | CockroachDB version to download (format: vX.Y.Z) | string | "v26.1.4" | No |
 | target_platforms | List of target platforms for download URLs | list(string) | ["linux-amd64"] | No |
 | include_sql_client_only | Include SQL client-only binaries | bool | false | No |
 | tags | Tags for organizational purposes | map(string) | {} | No |
@@ -85,10 +85,10 @@ output "checksums" {
 
 This configuration supports the following CockroachDB versions:
 
-- v24.3.x (Latest stable - recommended)
-- v24.2.x (Previous stable)
-- v24.1.x (LTS - Long Term Support)
-- v23.2.x (Previous LTS)
+- v26.1.x (Latest stable - recommended, e.g., v26.1.4)
+- v25.4.x (Latest LTS - Long Term Support, e.g., v25.4.10)
+- v25.2.x (Previous LTS, e.g., v25.2.18)
+- v24.3.x (Older LTS, e.g., v26.1.42)
 
 For the complete list of available versions, see the [CockroachDB GitHub Releases](https://github.com/cockroachdb/cockroach/releases).
 
@@ -112,17 +112,17 @@ After obtaining the download URL from this Terraform configuration:
 
 ```bash
 # Download the binary
-curl -o cockroach-v24.3.3.tgz <download_url>
+curl -o cockroach-v26.1.4.tgz <download_url>
 
 # Verify checksum (optional but recommended)
-curl -o cockroach-v24.3.3.tgz.sha256sum <checksum_url>
-sha256sum -c cockroach-v24.3.3.tgz.sha256sum
+curl -o cockroach-v26.1.4.tgz.sha256sum <checksum_url>
+sha256sum -c cockroach-v26.1.4.tgz.sha256sum
 
 # Extract the archive
-tar xvf cockroach-v24.3.3.tgz
+tar xvf cockroach-v26.1.4.tgz
 
 # Copy binary to PATH
-sudo cp cockroach-v24.3.3.linux-amd64/cockroach /usr/local/bin/
+sudo cp cockroach-v26.1.4.linux-amd64/cockroach /usr/local/bin/
 
 # Verify installation
 cockroach version
@@ -132,10 +132,10 @@ cockroach version
 
 ```powershell
 # Download using PowerShell
-Invoke-WebRequest -Uri <download_url> -OutFile cockroach-v24.3.3.zip
+Invoke-WebRequest -Uri <download_url> -OutFile cockroach-v26.1.4.zip
 
 # Extract the archive
-Expand-Archive -Path cockroach-v24.3.3.zip -DestinationPath .
+Expand-Archive -Path cockroach-v26.1.4.zip -DestinationPath .
 
 # Add to PATH or run from current directory
 .\cockroach.exe version

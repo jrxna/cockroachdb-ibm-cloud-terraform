@@ -1,190 +1,186 @@
 # CockroachDB - Downloadable Software for IBM Cloud
 
-This Terraform configuration provides download URLs and metadata for CockroachDB, the cloud-native distributed SQL database. This is a thin wrapper that enables CockroachDB to be listed in the IBM Cloud catalog as downloadable software.
+CockroachDB is a cloud-native distributed SQL database built for mission-critical applications. This Terraform configuration provides download URLs and metadata for CockroachDB binaries across multiple platforms (Linux, macOS, Windows), making it easy to obtain the correct version for your infrastructure. 
 
-## Overview
+CockroachDB offers familiar PostgreSQL-compatible SQL with ACID guarantees, scales horizontally from a few nodes to thousands, and provides automatic replication and repair with minimal downtime. Whether you're deploying on-premises, in IBM Cloud, or in hybrid environments, this configuration helps you get started quickly by providing verified download links and checksums for secure installation.
 
-CockroachDB is a distributed SQL database built on a transactional and strongly-consistent key-value store. It scales horizontally, survives disk, machine, rack, and even datacenter failures with minimal latency disruption and no manual intervention.
+In IBM Cloud, you can configure your installation from the Create tab, and then install it with a single click instead of executing the Terraform installation directly. Your Terraform template is installed by using IBM Cloud Schematics, and after the installation is complete, you can view the deployment, update the version, or uninstall from your Schematics workspace.
 
-## Features
+## Before you begin
 
-- **Distributed SQL**: Familiar PostgreSQL-compatible SQL with ACID guarantees
-- **Horizontal Scalability**: Scale seamlessly from a few nodes to thousands
-- **Built-in Survivability**: Automatic replication and repair with no data loss
-- **Cloud Native**: Deploy anywhere - on-premises, cloud, or hybrid
-- **Multi-Platform Support**: Available for Linux (x86_64, ARM64), macOS, and Windows
+Before you can install CockroachDB, you must complete the following prerequisites:
 
-## Prerequisites
+* Ensure you have **Terraform 1.4.0 or later** installed on your local machine or automation environment
+* Verify you have network access to download binaries from `binaries.cockroachdb.com` and `github.com`
+* To successfully install the software in IBM Cloud Schematics, you must have the [**Editor** role](https://cloud.ibm.com/docs/account?topic=account-userroles) on the IBM Cloud Schematics service
+* Determine which CockroachDB version you need:
+  - **v26.1.x** - Latest stable release (recommended for new deployments)
+  - **v25.4.x** - Latest LTS (Long Term Support) with extended maintenance
+  - **v25.2.x** or **v24.3.x** - Previous LTS versions for legacy compatibility
 
-- Terraform >= 1.4.0
-- Access to download binaries from cockroachdb.com or GitHub releases
+## Security and compliance controls
 
-## Usage
+CockroachDB meets industry-standard security and compliance requirements for production database deployments.
 
-### Basic Example
+| Profile | ID | Description |
+|---------|----|----|
+| NIST | SC-7(3) | Access Points - Network isolation and controlled access |
+| NIST | SC-8(1) | Transmission Confidentiality and Integrity - Cryptographic protection |
+| NIST | SC-28(1) | Protection of Information at Rest - Cryptographic protection |
+| CIS | 3.1 | Ensure that security group rules do not have unrestricted access |
 
-```hcl
-module "cockroachdb" {
-  source = "./"
-  
-  cockroachdb_version = "v26.1.4"
-  target_platforms    = ["linux-amd64"]
-}
+For detailed security configurations, see the [CockroachDB Security Reference](https://www.cockroachlabs.com/docs/stable/security-reference/).
 
-output "download_url" {
-  value = module.cockroachdb.download_urls["linux-amd64"]
-}
-```
+## Required resources
 
-### Multi-Platform Example
+To use this Terraform configuration, the following resources are required:
 
-```hcl
-module "cockroachdb" {
-  source = "./"
-  
-  cockroachdb_version = "v26.1.4"
-  target_platforms    = [
-    "linux-amd64",
-    "linux-arm64",
-    "darwin-amd64",
-    "windows-amd64"
-  ]
-  
-  tags = {
-    environment = "production"
-    application = "cockroachdb"
-  }
-}
+* **Terraform runtime environment** - IBM Cloud Schematics workspace (provided automatically) or local Terraform installation
+* **Network connectivity** - Outbound HTTPS access to cockroachdb.com and github.com for downloading binaries
+* **Storage** - Sufficient disk space on target systems for CockroachDB installation (varies by version, typically 150-200MB per binary)
 
-output "all_download_urls" {
-  value = module.cockroachdb.download_urls
-}
+This configuration does not provision any IBM Cloud infrastructure resources. It provides download URLs and metadata only. Actual CockroachDB installation and infrastructure must be managed separately.
 
-output "checksums" {
-  value = module.cockroachdb.checksum_urls
-}
-```
+## Installing the software
 
-## Input Variables
+After you configure your workspace in IBM Cloud Schematics, you can deploy the Terraform template to obtain CockroachDB download URLs.
 
-| Name | Description | Type | Default | Required |
-|------|-------------|------|---------|----------|
-| cockroachdb_version | CockroachDB version to download (format: vX.Y.Z) | string | "v26.1.4" | No |
-| target_platforms | List of target platforms for download URLs | list(string) | ["linux-amd64"] | No |
-| include_sql_client_only | Include SQL client-only binaries | bool | false | No |
-| tags | Tags for organizational purposes | map(string) | {} | No |
+### Configuration parameters
 
-### Supported Platforms
+Review and configure the following parameters before installation:
 
-- `linux-amd64` - Linux x86_64
-- `linux-arm64` - Linux ARM64
-- `darwin-amd64` - macOS (Intel and Apple Silicon via Rosetta)
-- `windows-amd64` - Windows x86_64
+| Parameter | Description | Default | Required |
+|-----------|-------------|---------|----------|
+| `cockroachdb_version` | CockroachDB version to download (format: vX.Y.Z) | v26.1.4 | Yes |
+| `target_platforms` | List of platforms for download URLs | ["linux-amd64"] | No |
+| `include_sql_client_only` | Include SQL client-only binaries | false | No |
+| `tags` | Tags for organizational purposes | {} | No |
 
-### Supported Versions
+### Supported platforms
 
-This configuration supports the following CockroachDB versions:
+Select one or more platforms from the following options:
 
-- v26.1.x (Latest stable - recommended, e.g., v26.1.4)
-- v25.4.x (Latest LTS - Long Term Support, e.g., v25.4.10)
-- v25.2.x (Previous LTS, e.g., v25.2.18)
-- v24.3.x (Older LTS, e.g., v26.1.42)
+* `linux-amd64` - Linux x86_64 (most common)
+* `linux-arm64` - Linux ARM64 (for ARM-based servers)
+* `darwin-amd64` - macOS (Intel and Apple Silicon via Rosetta)
+* `windows-amd64` - Windows x86_64
 
-For the complete list of available versions, see the [CockroachDB GitHub Releases](https://github.com/cockroachdb/cockroach/releases).
+### Installation outputs
 
-## Outputs
+After successful deployment, the following outputs are available:
 
-| Name | Description |
-|------|-------------|
-| cockroachdb_version | The CockroachDB version being downloaded |
-| download_urls | Map of download URLs by platform |
-| checksum_urls | SHA256 checksum URLs for verifying downloads |
-| github_release_url | GitHub release page URL |
-| documentation_url | CockroachDB documentation URL |
-| supported_platforms | List of configured platforms |
-| download_commands | Sample download commands for each platform |
+* **download_urls** - Direct download URLs for CockroachDB binaries by platform
+* **checksum_urls** - SHA256 checksum URLs for verifying download integrity
+* **github_release_url** - GitHub release page with full release notes
+* **documentation_url** - Official CockroachDB documentation
+* **download_commands** - Ready-to-use curl commands for each platform
 
-## Installation Instructions
+### Using the download URLs
 
-After obtaining the download URL from this Terraform configuration:
-
-### Linux / macOS
+Once deployed, use the output URLs to download CockroachDB:
 
 ```bash
-# Download the binary
-curl -o cockroach-v26.1.4.tgz <download_url>
+# Example: Download for Linux
+curl -o cockroach-v26.1.4.tgz <download_url_from_output>
 
-# Verify checksum (optional but recommended)
-curl -o cockroach-v26.1.4.tgz.sha256sum <checksum_url>
+# Verify checksum (recommended)
+curl -o cockroach-v26.1.4.tgz.sha256sum <checksum_url_from_output>
 sha256sum -c cockroach-v26.1.4.tgz.sha256sum
 
-# Extract the archive
-tar xvf cockroach-v26.1.4.tgz
-
-# Copy binary to PATH
+# Extract and install
+tar xzf cockroach-v26.1.4.tgz
 sudo cp cockroach-v26.1.4.linux-amd64/cockroach /usr/local/bin/
-
-# Verify installation
 cockroach version
 ```
 
-### Windows
+## Production configuration
 
-```powershell
-# Download using PowerShell
-Invoke-WebRequest -Uri <download_url> -OutFile cockroach-v26.1.4.zip
+For production deployments, consider the following recommendations:
 
-# Extract the archive
-Expand-Archive -Path cockroach-v26.1.4.zip -DestinationPath .
+### Version selection
 
-# Add to PATH or run from current directory
-.\cockroach.exe version
+* Use **LTS (Long Term Support)** versions (v25.4.x, v25.2.x, v24.3.x) for production workloads requiring extended maintenance windows
+* Use the **latest stable** version (v26.1.x) for new deployments that can adopt frequent updates
+* Pin specific patch versions (e.g., v26.1.4) rather than using wildcards to ensure consistent deployments
+
+### Security best practices
+
+* **Always verify checksums** - Use the `checksum_urls` output to validate downloaded binaries before installation
+* **Use secure downloads** - All download URLs use HTTPS to prevent man-in-the-middle attacks
+* **Follow principle of least privilege** - Install CockroachDB with appropriate user permissions, not as root
+* **Review release notes** - Check the `github_release_url` output for security advisories and breaking changes
+
+### Multi-platform deployments
+
+For heterogeneous environments, configure multiple platforms:
+
+```hcl
+target_platforms = [
+  "linux-amd64",   # Production servers
+  "linux-arm64",   # ARM-based cloud instances
+  "darwin-amd64"   # Developer workstations
+]
 ```
 
-## Quick Start
+## Upgrading to a new version
 
-After installation, start a single-node cluster for development:
+When a new version of CockroachDB is available, you can update your Schematics workspace to obtain download URLs for the new version.
 
-```bash
-# Start CockroachDB
-cockroach start-single-node --insecure --listen-addr=localhost:26257 --http-addr=localhost:8080
+To upgrade to a new CockroachDB version, complete the following steps:
 
-# Access SQL shell (in another terminal)
-cockroach sql --insecure --host=localhost:26257
+1. Go to **Menu** > **Schematics**
+2. Select your workspace name
+3. Click **Settings**. In the Variables section, locate the `cockroachdb_version` variable
+4. Click the **Edit** icon next to `cockroachdb_version`
+5. Enter the new version (e.g., `v26.1.5`) and click **Save**
+6. Click **Apply plan** to generate new download URLs for the updated version
+7. Review the outputs to obtain the new download URLs and checksums
 
-# Access Admin UI
-# Open browser to http://localhost:8080
-```
+**Important**: This Terraform configuration only provides download URLs. The actual CockroachDB upgrade process on your servers must be performed separately according to [CockroachDB upgrade documentation](https://www.cockroachlabs.com/docs/stable/upgrade-cockroach-version).
 
-## Documentation and Support
+### Version compatibility
 
-- **Official Documentation**: https://www.cockroachlabs.com/docs/stable/
-- **GitHub Repository**: https://github.com/cockroachdb/cockroach
-- **Community Forum**: https://forum.cockroachlabs.com/
-- **Slack Community**: https://cockroachdb.slack.com/
-- **Commercial Support**: https://www.cockroachlabs.com/pricing/
+When upgrading, review the following compatibility guidelines:
 
-## Security Considerations
+* **Patch upgrades** (e.g., v26.1.4 → v26.1.5) - Generally safe, include bug fixes only
+* **Minor upgrades** (e.g., v26.1.x → v26.2.x) - May include new features, review release notes
+* **Major upgrades** (e.g., v25.x → v26.x) - May include breaking changes, test thoroughly
 
-- Always verify checksums after downloading binaries
-- Use the `--secure` flag for production deployments
-- Configure TLS certificates for client-server and inter-node communication
-- Follow CockroachDB security best practices: https://www.cockroachlabs.com/docs/stable/security-reference/
+## Uninstalling the software
+
+This Terraform configuration does not install CockroachDB itself - it only provides download URLs. To remove the Schematics workspace:
+
+1. Go to **Menu** > **Schematics**
+2. Select your workspace name
+3. Click **Actions** > **Destroy resources** - This removes the Terraform state (no actual resources are destroyed)
+4. Click **Update** to confirm
+5. To delete your workspace, click **Actions** > **Delete workspace**
+
+**Note**: Destroying this Terraform workspace does not uninstall CockroachDB from your servers. To uninstall CockroachDB from your infrastructure, follow the [CockroachDB uninstall documentation](https://www.cockroachlabs.com/docs/stable/uninstall-cockroachdb).
+
+## Getting support
+
+For support with CockroachDB:
+
+* **Documentation**: [CockroachDB Documentation](https://www.cockroachlabs.com/docs/stable/)
+* **Community Forum**: [CockroachDB Community Forum](https://forum.cockroachlabs.com/)
+* **GitHub Issues**: [CockroachDB GitHub](https://github.com/cockroachdb/cockroach/issues)
+* **Commercial Support**: [Cockroach Labs Support](https://www.cockroachlabs.com/pricing/)
+
+For issues with this Terraform configuration or IBM Cloud Schematics integration:
+
+* **GitHub Repository**: [cockroachdb-ibm-cloud-terraform](https://github.com/jrxna/cockroachdb-ibm-cloud-terraform/issues)
 
 ## License
 
-CockroachDB is available under the Business Source License (BSL) 1.1 and the CockroachDB Community License (CCL).
+CockroachDB is available under the Business Source License (BSL) 1.1 and the CockroachDB Community License (CCL). For detailed licensing information, see:
 
-For more information, see:
-- https://www.cockroachlabs.com/docs/stable/licensing-faqs.html
-- https://github.com/cockroachdb/cockroach/blob/master/LICENSE
+* [CockroachDB Licensing FAQs](https://www.cockroachlabs.com/docs/stable/licensing-faqs.html)
+* [License File](https://github.com/cockroachdb/cockroach/blob/master/LICENSE)
 
-## Contributing
+## Additional resources
 
-This Terraform configuration is maintained by the CockroachDB team. For issues or contributions related to CockroachDB itself, please visit https://github.com/cockroachdb/cockroach.
-
-## Version History
-
-| Date | Version | Changes |
-|------|---------|---------|
-| 2026-05 | 1.0.0 | Initial release supporting CockroachDB v24.x downloads |
+* **CockroachDB GitHub**: [https://github.com/cockroachdb/cockroach](https://github.com/cockroachdb/cockroach)
+* **Quick Start Guide**: [https://www.cockroachlabs.com/docs/stable/install-cockroachdb](https://www.cockroachlabs.com/docs/stable/install-cockroachdb)
+* **Architecture Overview**: [https://www.cockroachlabs.com/docs/stable/architecture/overview](https://www.cockroachlabs.com/docs/stable/architecture/overview)
+* **Production Checklist**: [https://www.cockroachlabs.com/docs/stable/recommended-production-settings](https://www.cockroachlabs.com/docs/stable/recommended-production-settings)

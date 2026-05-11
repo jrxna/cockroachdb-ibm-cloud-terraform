@@ -59,10 +59,12 @@
           "label": "Standard Download",
           "name": "default",
           "short_description": "Download CockroachDB binaries for installation on user-managed infrastructure",
-          "long_description": "This configuration provides download URLs for CockroachDB binaries across multiple platforms (Linux, macOS, Windows) with configurable version selection. Suitable for users who want to install CockroachDB on their own infrastructure, whether on-premises, in IBM Cloud, or in other cloud environments.",
           "working_directory": ".",
           "install_type": "fullstack",
           "index": 1,
+          "release_notes_url": "https://github.com/jrxna/cockroachdb-ibm-cloud-terraform/releases",
+          "terraform_version": "1.4.0",
+          "ignore_readme": false,
           "architecture": {
             "features": [
               {

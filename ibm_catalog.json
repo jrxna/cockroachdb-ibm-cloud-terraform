@@ -3,7 +3,7 @@
     {
       "label": "CockroachDB",
       "name": "cockroachdb",
-      "product_kind": "software",
+      "product_kind": "solution",
       "tags": [
         "database",
         "sql",
@@ -61,6 +61,7 @@
           "short_description": "Download CockroachDB binaries for installation on user-managed infrastructure",
           "long_description": "This configuration provides download URLs for CockroachDB binaries across multiple platforms (Linux, macOS, Windows) with configurable version selection. Suitable for users who want to install CockroachDB on their own infrastructure, whether on-premises, in IBM Cloud, or in other cloud environments.",
           "working_directory": ".",
+          "install_type": "fullstack",
           "index": 1,
           "architecture": {
             "features": [
@@ -202,6 +203,12 @@
             {
               "key": "download_commands",
               "description": "Sample download commands for each platform"
+            }
+          ],
+          "iam_permissions": [
+            {
+              "role_crns": [],
+              "service_name": ""
             }
           ]
         }
